@@ -132,6 +132,10 @@ class LoadEvents {
         group: ["superToken"]
       });
       const tokens = [...tokensCFA, ...tokensGDA];
+      // now remove those in config.EXCLUDED_TOKENS, and log which were excluded
+      const excludedTokens = this.app.config.EXCLUDED_TOKENS;
+      const filteredTokens = tokens.filter(token => !excludedTokens.includes(token.superToken));
+      this.app.logger.info(`found ${tokens.length} tokens, excluding ${excludedTokens.length} tokens, keeping ${filteredTokens.length} tokens`);
       // fresh database
       if (systemInfo === null) {
         await this.app.db.models.SystemModel.create({
